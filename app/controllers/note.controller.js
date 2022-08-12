@@ -1,17 +1,17 @@
 const Note = require("../models/note.model");
 
 exports.postnotes = (req, res) => {
-    const note = new Note({
+    const newnote = new Note({
         title: req.body.title,
         content: req.body.content,
         deadline: req.body.deadline
     });
-    note.save(err => {
+    newnote.save(err => {
         if (err) {
             res.status(500).send({ message: err });
             return;
         }
-        return res.send(note);
+        return res.send(newnote);
     })
 };
 
@@ -33,5 +33,15 @@ exports.getOneNote = (req, res) => {
             return;
         }
         return res.send(note);
+    })
+};
+
+exports.deleteOneNote = (req, res) => {
+    Note.findByIdAndRemove({ _id: req.params.id }).exec((err, note) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+        }
+        return res.send(`note ${note} has been deleted`);
     })
 };
