@@ -11,6 +11,7 @@ const mongoose =  require("mongoose");
 const Note = mongoose.model(
     "Note",
     new mongoose.Schema({
+        _id: mongoose.Schema.Types.ObjectId,
         title: String,
         content: String,
         deadline: Date,
