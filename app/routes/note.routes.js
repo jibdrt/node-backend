@@ -1,0 +1,6 @@
+
+const controller = require("../controllers/note.controller");
+module.exports = function(app) {
+    app.post("/api/notes", controller.postnotes);
+    app.get("/api/notes", controller.getnotes);
+}

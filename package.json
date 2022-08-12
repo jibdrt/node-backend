@@ -1,0 +1,25 @@
+{
+  "name": "node_mongo",
+  "version": "1.0.0",
+  "description": "NodeJS + MongoDB + Express back-end",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node.js",
+    "express",
+    "mongodb",
+    "backend",
+    "jwt"
+  ],
+  "author": "jibdrt",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.1"
+  }
+}
