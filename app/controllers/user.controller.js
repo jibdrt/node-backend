@@ -1,5 +1,13 @@
+const User = require("../models/user.model");
+
 exports.allAccess = (req, res) => {
-  res.status(200).send("Public Content.");
+  User.find({}).exec((err, users) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    return res.send(users);
+  })
 };
 exports.userBoard = (req, res) => {
   res.status(200).send("User Content.");
