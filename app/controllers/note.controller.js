@@ -2,6 +2,7 @@ const Note = require("../models/note.model");
 
 exports.postnotes = (req, res) => {
     const newnote = new Note({
+        id: req.body._id,
         title: req.body.title,
         content: req.body.content,
         deadline: req.body.deadline
@@ -33,6 +34,23 @@ exports.getOneNote = (req, res) => {
             return;
         }
         return res.send(note);
+    })
+};
+
+exports.updateOneNote = (req, res) => {
+    const updatedNote = new Note({
+        _id: req.params.id,
+        title: req.body.title,
+        content: req.body.content,
+        deadline: req.body.deadline
+    })
+    const newNoteData = updatedNote;
+    Note.findByIdAndUpdate({ _id: req.params.id }, updatedNote).exec((err) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+        }
+        return res.send(`note has been updated with ${newNoteData}`);
     })
 };
 

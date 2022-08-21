@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to the app." });
+    res.json({ message: "app running" });
 });
 
 const db = require("./app/models");

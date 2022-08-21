@@ -8,6 +8,7 @@ module.exports = function(app) {
     );
     next();
   });
+  /* app.get("/api/profil/:id", controller.getOneUser); */
   app.get("/api/profil/all", controller.allAccess);
   app.get("/api/profil/user", [authJwt.verifyToken], controller.userBoard);
   app.get(
@@ -20,4 +21,5 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+  app.delete("/api/profil/:id", controller.deleteOneUser);
 };
