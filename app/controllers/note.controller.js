@@ -60,6 +60,6 @@ exports.deleteOneNote = (req, res) => {
             res.status(500).send({ message: err });
             return;
         }
-        return res.send(`note ${note} has been deleted`);
+        return res.send(note);
     })
 };

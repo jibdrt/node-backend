@@ -1,6 +1,6 @@
 
 
-const schemaOptions = {
+const timestampOption = {
     timestamps: {
       createdAt: 'created_at',
       updatedAt: 'updated_at'
@@ -19,7 +19,7 @@ const Note = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
-    }, schemaOptions)
+    }, timestampOption)
 );
 
 module.exports = Note;

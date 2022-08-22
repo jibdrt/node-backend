@@ -10,20 +10,8 @@ exports.allAccess = (req, res) => {
   })
 };
 
-
-/* exports.getOneUser = (req, res) => {
-  User.find({ _id: req.params.id }).exec((err, user) => {
-      if (err) {
-          res.status(500).send({ message: err });
-          return;
-      }
-      return res.send(user);
-  })
-}; */
-
-
 exports.deleteOneUser = (req, res) => {
-  User.findByIdAndRemove({_id: req.params.id }).exec((err, user) => {
+  User.findByIdAndRemove({ _id: req.params.id }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -32,11 +20,16 @@ exports.deleteOneUser = (req, res) => {
   })
 };
 
-
-
 exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
+  User.find({}).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    return res.send(user);
+  })
 };
+
 exports.adminBoard = (req, res) => {
   res.status(200).send("Admin Content.");
 };
