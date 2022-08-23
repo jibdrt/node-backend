@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "jib-secret-key"
+    secret: "secret-key"
 };

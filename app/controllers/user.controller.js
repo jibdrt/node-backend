@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 
+
 exports.allAccess = (req, res) => {
   User.find({}).exec((err, users) => {
     if (err) {
@@ -21,7 +22,8 @@ exports.deleteOneUser = (req, res) => {
 };
 
 exports.userBoard = (req, res) => {
-  User.find({}).exec((err, user) => {
+  const userLog = req.userId;
+  User.find({ _id: userLog }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
