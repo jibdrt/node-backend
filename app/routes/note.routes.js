@@ -1,9 +1,10 @@
-
+const { authJwt } = require("../middleware");
 const controller = require("../controllers/note.controller");
-module.exports = function(app) {
-    app.post("/api/notes", controller.postnotes);
+module.exports = function (app) {
+ 
     app.get("/api/notes", controller.getAllNotes);
     app.get("/api/notes/:id", controller.getOneNote);
-    app.put("/api/notes/:id", controller.updateOneNote);
-    app.delete("/api/notes/:id", controller.deleteOneNote);
+    app.post("/api/notes", [authJwt.verifyToken], controller.newNote);
+    app.put("/api/notes/:id", [authJwt.verifyToken], controller.updateOneNote);
+    app.delete("/api/notes/:id", [authJwt.verifyToken], controller.deleteOneNote);
 }

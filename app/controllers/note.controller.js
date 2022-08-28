@@ -1,6 +1,9 @@
 const Note = require("../models/note.model");
+const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
+const config = require("../config/auth.config.js");
 
-exports.postnotes = (req, res) => {
+/* exports.postnotes = (req, res) => {
     const newnote = new Note({
         id: req.body._id,
         title: req.body.title,
@@ -14,7 +17,31 @@ exports.postnotes = (req, res) => {
         }
         return res.send(newnote);
     })
-};
+}; */
+
+exports.newNote = async (req, res) => {
+    // Create new note
+    const newNote = new Note(req.body);
+    // Get user
+    const token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, config.secret, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: "Unauthorized!" });
+        }
+        req.userId = decoded.id;
+        return req.userId;
+    });
+    const user = await User.findById({ _id: decoded });
+    // Asign user as note's creator
+    newNote.creator = user;
+    // Save the note
+    await newNote.save();
+    // Add note to the user's array 'notes'
+    user.notes.push(newNote);
+    // Save the user
+    await user.save();
+    res.status(201).json(newNote);
+}
 
 
 exports.getAllNotes = (req, res) => {
@@ -33,16 +60,21 @@ exports.getOneNote = (req, res) => {
             res.status(500).send({ message: err });
             return;
         }
-        return res.send(note);
+        return res.send(note/* .map(n => ({
+            "titre": n.title,
+            "contenu": n.content,
+            "deadline": n.deadline,
+            "par": n.creator,
+            "le": n.created_at,
+            "maj": n.updated_at
+          })) */);
     })
 };
 
 exports.updateOneNote = (req, res) => {
     const updatedNote = new Note({
         _id: req.params.id,
-        title: req.body.title,
-        content: req.body.content,
-        deadline: req.body.deadline
+        ...req.body
     })
     const newNoteData = updatedNote;
     Note.findByIdAndUpdate({ _id: req.params.id }, updatedNote).exec((err) => {
@@ -63,3 +95,6 @@ exports.deleteOneNote = (req, res) => {
         return res.send(`note ${note} has been deleted!`);
     })
 };
+
+
+

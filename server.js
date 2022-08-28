@@ -3,16 +3,19 @@ const cors = require("cors");
 const app = express();
 const dbConfig = require("./app/config/db.config");
 const corsOptions = {
-    origin: "http://localhost:8081"
+  origin: "http://localhost:8081"
 };
+
+require('dotenv').config();
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.json({ message: "app running" });
+  res.json({ message: "app running" });
 });
 
 const db = require("./app/models");
@@ -23,7 +26,7 @@ db.mongoose
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log("Successfully connect to MongoDB.");
+    console.log("Connected to MongoDB");
     initial();
   })
   .catch(err => {
@@ -43,14 +46,6 @@ function initial() {
         console.log("added 'user' to roles collection");
       });
       new Role({
-        name: "moderator"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added 'moderator' to roles collection");
-      });
-      new Role({
         name: "admin"
       }).save(err => {
         if (err) {
@@ -67,7 +62,7 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/note.routes')(app);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}.`);
+  console.log(`Server running on port ${PORT}.`);
 });
