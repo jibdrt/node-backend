@@ -1,5 +1,5 @@
 
-
+const Note = require ("../models/note.model");
 const mongoose = require("mongoose");
 const User = mongoose.model(
     "User",
@@ -19,6 +19,10 @@ const User = mongoose.model(
                 ref: "Note"
             }
         ]
-    })
+    }),
 );
+
+
+
 module.exports = User;
+

@@ -3,44 +3,32 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
 
-/* exports.postnotes = (req, res) => {
-    const newnote = new Note({
-        id: req.body._id,
-        title: req.body.title,
-        content: req.body.content,
-        deadline: req.body.deadline
-    });
-    newnote.save(err => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-        return res.send(newnote);
-    })
-}; */
 
-exports.newNote = async (req, res) => {
-    // Create new note
-    const newNote = new Note(req.body);
-    // Get user
-    const token = req.headers["x-access-token"];
-    const decoded = jwt.verify(token, config.secret, (err, decoded) => {
-        if (err) {
-            return res.status(401).send({ message: "Unauthorized!" });
-        }
-        req.userId = decoded.id;
-        return req.userId;
-    });
-    const user = await User.findById({ _id: decoded });
-    // Asign user as note's creator
-    newNote.creator = user;
-    // Save the note
-    await newNote.save();
-    // Add note to the user's array 'notes'
-    user.notes.push(newNote);
-    // Save the user
-    await user.save();
-    res.status(201).json(newNote);
+exports.newNote = async (req, res, next) => {
+    try {
+        const newNote = new Note(req.body);
+        // get user
+        const token = req.headers["x-access-token"];
+        const decoded = jwt.verify(token, config.secret, (err, decoded) => {
+            if (err) {
+                return res.status(401).send({ message: "Unauthorized" });
+            }
+            req.userId = decoded.id;
+            return req.userId;
+        });
+        const user = await User.findById({ _id: decoded });
+        // user as note's creator
+        newNote.creator = user;
+        // save the note
+        await newNote.save();
+        // push note to notes[] in user
+        user.notes.push(newNote._id);
+        // save user
+        await user.save();
+        res.status(201).json(newNote);
+    } catch (err) {
+        next(err);
+    }
 }
 
 
@@ -95,6 +83,18 @@ exports.deleteOneNote = (req, res) => {
         return res.send(`note ${note} has been deleted!`);
     })
 };
+
+/* exports.deleteOneNote = async (req, res, next) => {
+    try {
+        const removednote = Note.findByIdAndRemove({ _id: req.params.id });
+        const inuser = User.findOneAndRemove({
+             $pull: { "notes": { _id: req.params.id } }
+        });
+        res.status(200).send(removednote, usernote);
+    } catch (err) {
+        next(err);
+    }
+} */
 
 
 
