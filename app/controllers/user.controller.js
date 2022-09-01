@@ -5,7 +5,7 @@ const config = require("../config/auth.config.js");
 
 
 
-exports.allAccess = async (req, res, next) => {
+exports.userList = async (req, res, next) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);

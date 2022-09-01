@@ -6,11 +6,11 @@ const Role = db.role;
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
   if (!token) {
-    return res.status(403).send({ message: "No token provided!" });
+    return res.status(403).send({ message: "no token found" });
   }
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
+      return res.status(401).send({ message: "don't have required authorization" });
     }
     req.userId = decoded.id;
     next();
@@ -37,7 +37,7 @@ isAdmin = (req, res, next) => {
             return;
           }
         }
-        res.status(403).send({ message: "Require Admin Role!" });
+        res.status(403).send({ message: "require Admin role" });
         return;
       }
     );

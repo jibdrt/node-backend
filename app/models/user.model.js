@@ -1,5 +1,4 @@
 
-const Note = require ("../models/note.model");
 const mongoose = require("mongoose");
 const User = mongoose.model(
     "User",

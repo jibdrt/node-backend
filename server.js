@@ -34,6 +34,10 @@ db.mongoose
     process.exit();
   });
 
+
+
+  
+
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
