@@ -79,7 +79,7 @@ exports.signin = (req, res) => {
         });
 
       }
-      var token = jwt.sign({ id: user.id }, config.secret, {
+      var token = jwt.sign({ id: user.id, role: user.roles }, config.secret, {
         expiresIn: 86400 // set high (24h) for the moment
       });
       var authorities = [];

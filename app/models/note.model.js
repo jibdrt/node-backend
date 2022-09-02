@@ -20,11 +20,12 @@ const Note = mongoose.model(
     },
     deadline: {
       type: Date,
-      required: true
+      required: false
     },
     is_pinned: Boolean,
     creator: {
       type: mongoose.Schema.Types.ObjectId,
+      username: String,
       ref: "User"
     },
     color: {

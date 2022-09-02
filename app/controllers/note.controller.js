@@ -74,7 +74,7 @@ exports.updateOneNote = (req, res) => {
     })
 };
 
-exports.deleteOneNote = (req, res) => {
+/* exports.deleteOneNote = (req, res) => {
     Note.findByIdAndRemove({ _id: req.params.id }).exec((err, note) => {
         if (err) {
             res.status(500).send({ message: err });
@@ -82,19 +82,32 @@ exports.deleteOneNote = (req, res) => {
         }
         return res.send(`note ${note} has been deleted!`);
     })
-};
+}; */
 
-/* exports.deleteOneNote = async (req, res, next) => {
+exports.deleteOneNote = async (req, res, next) => {
     try {
-        const removednote = Note.findByIdAndRemove({ _id: req.params.id });
-        const inuser = User.findOneAndRemove({
-             $pull: { "notes": { _id: req.params.id } }
-        });
-        res.status(200).send(removednote, usernote);
+        const targetedForDelete = await Note.findByIdAndRemove({ _id: req.params.id });
+        return ({ targetedForDelete: targetedForDelete })
     } catch (err) {
         next(err);
     }
-} */
+}
+
+/* delete: function(req, res) {
+    return Project.findById(req.params.id, function(err, project){
+          return project.remove(function(err){
+              if(!err) {
+                  Assignment.update({_id: {$in: project.assingments}}, 
+                       {$pull: {project: project._id}}, 
+                            function (err, numberAffected) {
+                             console.log(numberAffected);
+                       } else {
+                         console.log(err);                                      
+                     }
+                   });
+             });
+         });
+ } */
 
 
 

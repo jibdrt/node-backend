@@ -32,7 +32,8 @@ exports.userList = async (req, res, next) => {
 exports.userBoard = async (req, res, next) => {
   try {
     const user = await User.find({ _id: req.userId });
-    return res.send(user);
+    const usernotes = await Note.find({ creator: user });
+    return res.send({user: user, usernotes: usernotes});
   } catch (err) {
     next(err);
   }
