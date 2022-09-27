@@ -4,10 +4,15 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
 
 
-
 exports.userList = async (req, res, next) => {
+  const projection = {
+    password: false
+  };
   try {
-    const users = await User.find({});
+    const users = await User.find({}, projection).populate({
+      path: "roles",
+      select: { _id: 0, name: 1 }
+    })
     res.status(200).json(users);
   } catch (err) {
     next(err);
@@ -31,7 +36,7 @@ exports.userBoard = async (req, res, next) => {
   try {
     const user = await User.find({ _id: req.userId });
     const usernotes = await Note.find({ creator: user });
-    return res.send({user: user, usernotes: usernotes});
+    return res.send({ user: user, usernotes: usernotes });
   } catch (err) {
     next(err);
   }
