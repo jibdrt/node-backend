@@ -12,7 +12,13 @@ const User = mongoose.model(
                 ref: "Role"
             }
         ],
-        notes: [
+        postedNotes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Note"
+            }
+        ],
+        involvement: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Note"

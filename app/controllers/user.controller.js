@@ -14,8 +14,6 @@ exports.userList = async (req, res, next) => {
   }
 },
 
-
-
   exports.deleteOneUser = async (req, res, next) => {
     try {
       const userId = req.params.id;

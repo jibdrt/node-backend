@@ -25,13 +25,19 @@ const Note = mongoose.model(
     is_pinned: Boolean,
     creator: {
       type: mongoose.Schema.Types.ObjectId,
-      username: String,
       ref: "User"
     },
     color: {
       type: String,
       required: true
-    }
+    },
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        username: String,
+        ref: "User"
+      }
+    ]
   }, timestampOption)
 );
 

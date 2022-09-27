@@ -2,6 +2,7 @@ const Note = require("../models/note.model");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
+const { default: mongoose } = require("mongoose");
 
 
 exports.newNote = async (req, res, next) => {
@@ -17,14 +18,28 @@ exports.newNote = async (req, res, next) => {
             return req.userId;
         });
         const user = await User.findById({ _id: decoded });
+        const participants = newNote.participants;
+/*         const concerned = await User.find({
+            _id: participants
+        }); */
         // user as note's creator
         newNote.creator = user;
+
+        const concerned = await User.updateMany(
+            { _id: participants }, 
+            { $addToSet: { involvement: newNote._id } }
+          );
+        console.log(concerned);
         // save the note
         await newNote.save();
-        // push note to notes[] in user
-        user.notes.push(newNote._id);
+/*         // make all participants involved in this new Note
+        // push the note id in their involvement array
+        concerned.involvement.push(newNote._id); */
+        // push note to postedNotes[] in user
+        user.postedNotes.push(newNote._id);
         // save user
         await user.save();
+/*         await data.save(); */
         res.status(201).json(newNote);
     } catch (err) {
         next(err);
