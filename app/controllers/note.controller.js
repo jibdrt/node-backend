@@ -2,7 +2,6 @@ const Note = require("../models/note.model");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
-const { default: mongoose } = require("mongoose");
 
 
 exports.newNote = async (req, res, next) => {
@@ -19,27 +18,29 @@ exports.newNote = async (req, res, next) => {
         });
         const user = await User.findById({ _id: decoded });
         const participants = newNote.participants;
-/*         const concerned = await User.find({
-            _id: participants
-        }); */
+
         // user as note's creator
         newNote.creator = user;
 
+
+        // make all participants involved in this new Note
+        // push the note id in their involvement array
+
         const concerned = await User.updateMany(
-            { _id: participants }, 
+            { _id: participants },
             { $addToSet: { involvement: newNote._id } }
-          );
+        );
         console.log(concerned);
+
         // save the note
         await newNote.save();
-/*         // make all participants involved in this new Note
-        // push the note id in their involvement array
-        concerned.involvement.push(newNote._id); */
+
         // push note to postedNotes[] in user
         user.postedNotes.push(newNote._id);
+
         // save user
         await user.save();
-/*         await data.save(); */
+
         res.status(201).json(newNote);
     } catch (err) {
         next(err);
@@ -47,14 +48,26 @@ exports.newNote = async (req, res, next) => {
 }
 
 
-exports.getAllNotes = (req, res) => {
-    Note.find({}).exec((err, notes) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
+exports.getAllNotes = async (req, res, next) => {
+    try {
+        const notes = await Note.find({})
+
+            // return username for creator and participants
+            .populate([
+                {
+                    path: "creator",
+                    select: { _id: 0, username: 1 }
+                },
+                {
+                    path: "participants",
+                    select: { _id: 0, username: 1 }
+                }
+            ])
         return res.send(notes);
-    })
+    }
+    catch (err) {
+        next(err)
+    }
 };
 
 exports.getOneNote = (req, res) => {
@@ -89,15 +102,6 @@ exports.updateOneNote = (req, res) => {
     })
 };
 
-/* exports.deleteOneNote = (req, res) => {
-    Note.findByIdAndRemove({ _id: req.params.id }).exec((err, note) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-        return res.send(`note ${note} has been deleted!`);
-    })
-}; */
 
 exports.deleteOneNote = async (req, res, next) => {
     try {
@@ -108,21 +112,7 @@ exports.deleteOneNote = async (req, res, next) => {
     }
 }
 
-/* delete: function(req, res) {
-    return Project.findById(req.params.id, function(err, project){
-          return project.remove(function(err){
-              if(!err) {
-                  Assignment.update({_id: {$in: project.assingments}}, 
-                       {$pull: {project: project._id}}, 
-                            function (err, numberAffected) {
-                             console.log(numberAffected);
-                       } else {
-                         console.log(err);                                      
-                     }
-                   });
-             });
-         });
- } */
+
 
 
 

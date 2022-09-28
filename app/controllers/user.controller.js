@@ -31,12 +31,24 @@ exports.userList = async (req, res, next) => {
     }
   }
 
+  
+/*   exports.editProfil = async (req, res, next) => {
+    try {
+      
+    } catch (err) {
+      
+    }
+  } */
+
 
 exports.userBoard = async (req, res, next) => {
   try {
-    const user = await User.find({ _id: req.userId });
-    const usernotes = await Note.find({ creator: user });
-    return res.send({ user: user, usernotes: usernotes });
+    const user = await User.find({ _id: req.userId }).populate({
+      path: "roles",
+      select: { _id: 0, name: 1 }
+    })
+    /*     const usernotes = await Note.find({ creator: user }); */
+    return res.send({ user: user });
   } catch (err) {
     next(err);
   }

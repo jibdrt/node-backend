@@ -25,6 +25,7 @@ const Note = mongoose.model(
     is_pinned: Boolean,
     creator: {
       type: mongoose.Schema.Types.ObjectId,
+      username: String,
       ref: "User"
     },
     color: {

@@ -11,6 +11,7 @@ module.exports = function (app) {
   });
   app.get("/api/profil/all", controller.userList);
   app.get("/api/profil/user", [authJwt.verifyToken], controller.userBoard);
+/*   app.patch("/api/profil/user", [authJwt.verifyToken], controller.editProfil); */
   app.get("/api/profil/admin", [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
   app.delete("/api/profil/all/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteOneUser);
   app.get('/api/profil/all/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.userDetail);
