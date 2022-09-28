@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const Note = require("../models/note.model");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
+const { findByIdAndUpdate } = require("../models/note.model");
 
 
 exports.userList = async (req, res, next) => {
@@ -31,14 +32,40 @@ exports.userList = async (req, res, next) => {
     }
   }
 
-  
-/*   exports.editProfil = async (req, res, next) => {
-    try {
-      
-    } catch (err) {
-      
-    }
-  } */
+
+exports.editProfil = async (req, res, next) => {
+  try {
+
+    const token = req.headers['x-access-token'];
+
+    const decoded = jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        return res.status(401).send({ message: "Unauthorized!" });
+      }
+      req.userId = decoded.id;
+      return req.userId;
+    });
+
+    const updatedUser = new User({
+      _id: decoded,
+      ...req.body
+    }, { $set: req.body }); // update only filled fields
+
+    const newUserData = updatedUser;
+
+    User.findByIdAndUpdate({ _id: decoded }, updatedUser).exec((err) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      return res.send(`user has been updated with ${newUserData}`);
+    })
+    
+  } catch (err) {
+    next(err);
+  }
+}
 
 
 exports.userBoard = async (req, res, next) => {

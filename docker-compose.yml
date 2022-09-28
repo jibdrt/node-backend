@@ -1,0 +1,35 @@
+version: "3"
+services:
+  back:
+    image: node
+    restart: "no"
+    ports:
+      - 8080:8080
+    command: npx nodemon server.js
+    working_dir: /node_backend
+    volumes:
+      - ./:/node_backend
+
+  mongo-express:
+    env_file:
+      - ./.env
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 3300:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${DBHOST}:${DBPORT}/${DB}
+    depends_on:
+      - mongo
+
+  mongo:
+    env_file:
+      - ./.env
+    image: mongo
+    environment:
+    - ME_CONFIG_MONGODB_SERVER=mongo
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
