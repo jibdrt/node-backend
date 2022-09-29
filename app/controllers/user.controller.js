@@ -2,8 +2,7 @@ const User = require("../models/user.model");
 const Note = require("../models/note.model");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
-const { findByIdAndUpdate } = require("../models/note.model");
-
+var bcrypt = require("bcryptjs");
 
 exports.userList = async (req, res, next) => {
   const projection = {
@@ -61,12 +60,76 @@ exports.editProfil = async (req, res, next) => {
 
       return res.send(`user has been updated with ${newUserData}`);
     })
-    
+
   } catch (err) {
     next(err);
   }
 }
 
+
+
+exports.changePassword = async (req, res, next) => {
+
+  try {
+      const { currentPassword, newPassword, confirmNewPassword } = req.body;
+
+      const token = req.headers['x-access-token'];
+
+      const decoded = jwt.verify(token, config.secret, (err, decoded) => {
+          if (err) {
+              return res.status(401).send({ message: "Unauthorized!" });
+          }
+          req.userId = decoded.id;
+          return req.userId;
+      });
+
+      User.findOne({ _id: decoded }).then(async (user) => {
+
+
+          const matchCurrent = await bcrypt.compare(currentPassword, user.password); //encrypt new password
+
+          if (matchCurrent) {
+              console.log('correspondance ok');
+
+              //Update password for user with new password hash
+              bcrypt.genSalt(10, (err, salt) =>
+                  bcrypt.hash(newPassword, salt, (err, hash) => {
+                      if (err) throw err;
+                      user.password = hash;
+                      user.save();
+                  })
+              );
+              res.status(200).send("Mot de passe mis à jour");
+          } else {
+              //Password does not match
+              res.send('pas de correspondance currentPassword / user.password');
+          }
+      });
+
+  } catch (err) {
+      //Check required fields
+      if (!currentPassword || !newPassword || !confirmNewPassword) {
+          res.send({ msg: "Remplissez tous les champs." });
+      }
+
+      //Check passwords match
+      if (newPassword !== confirmNewPassword) {
+          res.send({ msg: "La confirmation du mot de passe n'a pas fonctionné" });
+      }
+
+      //Check password length
+      if (newPassword.length < 4 || confirmNewPassword.length < 4) {
+          res.send({ msg: "Le mot de passe doit être constitué d'au moins 4 caractères." });
+      }
+
+      if (errors.length > 0) {
+          res.send(err);
+      }
+
+      next(err);
+
+  }
+};
 
 exports.userBoard = async (req, res, next) => {
   try {

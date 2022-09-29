@@ -87,19 +87,27 @@ exports.getOneNote = (req, res) => {
     })
 };
 
-exports.updateOneNote = (req, res) => {
-    const updatedNote = new Note({
-        _id: req.params.id,
-        ...req.body
-    })
-    const newNoteData = updatedNote;
-    Note.findByIdAndUpdate({ _id: req.params.id }, updatedNote).exec((err) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-        return res.send(`note has been updated with ${newNoteData}`);
-    })
+exports.updateOneNote = async (req, res) => {
+
+    try {
+        const updatedNote = new Note({
+            _id: req.params.id,
+            ...req.body
+        }, { $set: req.body });
+
+        const newNoteData = updatedNote;
+
+        Note.findByIdAndUpdate({ _id: req.params.id }, updatedNote).exec((err) => {
+            if (err) {
+                res.status(500).send({ message: err });
+                return;
+            }
+            return res.send(`note has been updated with ${newNoteData}`);
+        })
+    } catch (err) {
+        
+        res.status(500).send({ message: err });
+    }
 };
 
 
