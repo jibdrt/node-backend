@@ -41,7 +41,24 @@ exports.newNote = async (req, res, next) => {
         // save user
         await user.save();
 
-        res.status(201).json(newNote);
+
+
+        const newNotePushed = await Note.findById(newNote._id)
+
+            // return username for creator and participants
+            .populate([
+                {
+                    path: "creator",
+                    select: { _id: 0, username: 1 }
+                },
+                {
+                    path: "participants",
+                    select: { _id: 0, username: 1 }
+                }
+            ])
+
+
+        res.status(201).json(newNotePushed);
     } catch (err) {
         next(err);
     }
@@ -70,21 +87,28 @@ exports.getAllNotes = async (req, res, next) => {
     }
 };
 
-exports.getOneNote = (req, res) => {
-    Note.find({ _id: req.params.id }).exec((err, note) => {
-        if (err) {
-            res.status(500).send({ message: err });
-            return;
-        }
-        return res.send(note/* .map(n => ({
-            "titre": n.title,
-            "contenu": n.content,
-            "deadline": n.deadline,
-            "par": n.creator,
-            "le": n.created_at,
-            "maj": n.updated_at
-          })) */);
-    })
+exports.getOneNote = async (req, res) => {
+    try {
+        const thisNote = await Note.find({ _id: req.params.id })
+
+            // return username for creator and participants
+            .populate([
+                {
+                    path: "creator",
+                    select: { _id: 0, username: 1 }
+                },
+                {
+                    path: "participants",
+                    select: { _id: 0, username: 1 }
+                }
+            ])
+
+
+        res.status(201).json(thisNote);
+    } catch (err) {
+        res.status(500).send({ message: err });
+        return;
+    }
 };
 
 exports.updateOneNote = async (req, res) => {
@@ -105,7 +129,7 @@ exports.updateOneNote = async (req, res) => {
             return res.send(`note has been updated with ${newNoteData}`);
         })
     } catch (err) {
-        
+
         res.status(500).send({ message: err });
     }
 };
@@ -113,8 +137,8 @@ exports.updateOneNote = async (req, res) => {
 
 exports.deleteOneNote = async (req, res, next) => {
     try {
-        const targetedForDelete = await Note.findByIdAndRemove({ _id: req.params.id });
-        return ({ targetedForDelete: targetedForDelete })
+        const targetedForDelete = await Note.findByIdAndRemove({ _id: req.params.id })
+        return res.send(`note ${targetedForDelete} has been deleted`);
     } catch (err) {
         next(err);
     }

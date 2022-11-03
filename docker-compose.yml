@@ -5,7 +5,7 @@ services:
     restart: "no"
     ports:
       - 8080:8080
-    command: npx nodemon server.js
+    command: npx nodemon -L server.js
     working_dir: /node_backend
     volumes:
       - ./:/node_backend
@@ -26,10 +26,10 @@ services:
     env_file:
       - ./.env
     image: mongo
-    environment:
-    - ME_CONFIG_MONGODB_SERVER=mongo
     restart: always
     volumes:
       - ./data/db:/data/db
     ports:
       - 27017:27017
+
+  

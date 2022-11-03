@@ -47,7 +47,7 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-        console.log("added 'user' to roles collection");
+        console.log("added user to roles");
       });
       new Role({
         name: "admin"
@@ -55,7 +55,7 @@ function initial() {
         if (err) {
           console.log("error", err);
         }
-        console.log("added 'admin' to roles collection");
+        console.log("added admin to roles");
       });
     }
   });
