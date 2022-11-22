@@ -1,5 +1,9 @@
+const { authJwt } = require("../middleware");
+const controller = require('../controllers/file.controller');
 
-const controller = require ('../controllers/file.controller');
 module.exports = function (app) {
-    app.post('/api/files', controller.newFile);
+
+    app.get('/api/files', controller.getFiles);
+    app.post('/api/files', [authJwt.verifyToken], controller.newFile);
+    app.delete('/api/files', [authJwt.verifyToken], controller.deleteFile);
 }

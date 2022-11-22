@@ -19,6 +19,12 @@ const User = mongoose.model(
                 ref: "Note"
             }
         ],
+        postedFiles: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "File"
+            }
+        ],
         involvement: [
             {
                 type: mongoose.Schema.Types.ObjectId,

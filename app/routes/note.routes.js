@@ -1,5 +1,6 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/note.controller");
+
 module.exports = function (app) {
  
     app.get("/api/notes", controller.getAllNotes);
