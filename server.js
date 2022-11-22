@@ -5,6 +5,7 @@ const dbConfig = require("./app/config/db.config");
 const corsOptions = {
   origin: "http://localhost:8081"
 };
+const fileUpload = require('express-fileupload')
 
 require('dotenv').config();
 
@@ -13,6 +14,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
+
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+  abortOnLimit: true
+}));
 
 app.get("/", (req, res) => {
   res.json({ message: "app running" });
@@ -36,7 +42,7 @@ db.mongoose
 
 
 
-  
+
 
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
@@ -61,10 +67,10 @@ function initial() {
   });
 }
 
-
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/note.routes')(app);
+require('./app/routes/file.routes')(app);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
