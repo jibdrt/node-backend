@@ -5,9 +5,10 @@ const config = require("../config/auth.config.js");
 const fs = require("fs");
 
 exports.newFile = async (req, res) => {
-    const files = req.files;
+    console.log(Object.keys(req.files));
+    const filekey = Object.keys(req.files)[0];
     try {
-        fs.appendFileSync('./uploads/' + req.files.file.name, req.files.file.data, (err) => {
+        fs.appendFileSync('./uploads/' + req.files[filekey].name, req.files[filekey].data, (err) => {
             if (err) {
                 console.log(err);
             }
@@ -20,7 +21,7 @@ exports.newFile = async (req, res) => {
             req.userId = decoded.id;
             return req.userId;
         });
-        const newFile = await new File(req.files.file);
+        const newFile = await new File(req.files[filekey]);
         const user = await User.findById({ _id: decoded });
 
         newFile.posted_by = user;
@@ -42,6 +43,7 @@ exports.newFile = async (req, res) => {
         res.send(savedFile);
     } catch (err) {
         console.log(err);
+        res.status(500).send();
     }
 }
 
@@ -55,6 +57,19 @@ exports.getFiles = async (req, res) => {
         res.send(files);
     } catch (err) {
         console.log(err);
+    }
+}
+
+
+
+exports.downloadFile = async (req, res) => {
+    try {
+        const thisFile = await File.findOne({ _id: req.params.id });
+        console.log(thisFile);
+        var path = './uploads/' + thisFile.name;
+        res.download(path);
+    } catch (err) {
+        return res.status(500).send(err);
     }
 }
 

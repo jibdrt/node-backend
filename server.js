@@ -5,7 +5,8 @@ const dbConfig = require("./app/config/db.config");
 const corsOptions = {
   origin: "http://localhost:8081"
 };
-const fileUpload = require('express-fileupload')
+
+const fileUpload = require('express-fileupload');
 
 require('dotenv').config();
 

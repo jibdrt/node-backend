@@ -8,7 +8,7 @@ const File = mongoose.model(
         name: {
             type: String,
             required: true,
-            min: 3,
+            min: 1,
             max: 10000
         },
         posted_at: {

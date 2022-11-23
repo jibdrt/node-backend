@@ -104,7 +104,7 @@ exports.getOneNote = async (req, res) => {
             ])
 
 
-        res.status(201).json(thisNote);
+        res.status(200).json(thisNote);
     } catch (err) {
         res.status(500).send({ message: err });
         return;
