@@ -30,6 +30,12 @@ const User = mongoose.model(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Note"
             }
+        ],
+        picture: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Picture"
+            }
         ]
     }),
 );

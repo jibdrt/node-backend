@@ -72,6 +72,7 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/note.routes')(app);
 require('./app/routes/file.routes')(app);
+require('./app/routes/picture.routes')(app);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

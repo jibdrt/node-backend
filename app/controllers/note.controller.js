@@ -137,8 +137,22 @@ exports.updateOneNote = async (req, res) => {
 
 exports.deleteOneNote = async (req, res, next) => {
     try {
-        const targetedForDelete = await Note.findByIdAndRemove({ _id: req.params.id })
-        return res.send(`note ${targetedForDelete} has been deleted`);
+
+        const noteId = req.params.id;
+
+        const targetedForDelete = await Note.findByIdAndRemove({ _id: noteId });
+
+        const targetedInvolvement = await User.findOneAndUpdate(
+            { involvement: noteId },
+            { $unset: { involvement: '' }}
+        );
+
+        const targetedPostedNote = await User.findOneAndUpdate(
+            { postedNotes: noteId },
+            { $unset: { postedNotes: '' }}
+        );
+
+        res.send(`note ${targetedForDelete.id} has been deleted and his ${targetedInvolvement.id}, ${targetedPostedNote.id} too`);
     } catch (err) {
         next(err);
     }

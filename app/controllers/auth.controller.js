@@ -47,7 +47,7 @@ exports.signup = (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
-          res.send({ message: "user registration successfull" });
+          res.status(200).send({ message: "Compte enregistré, connectez-vous avec vos identifiants" });
         });
       });
     }
@@ -91,7 +91,8 @@ exports.signin = (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
-        accessToken: token
+        accessToken: token,
+        message: "Bonjour " + user.username
       });
     });
 };

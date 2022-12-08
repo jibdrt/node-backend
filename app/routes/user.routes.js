@@ -13,8 +13,8 @@ module.exports = function (app) {
   app.get("/api/profil/user", [authJwt.verifyToken], controller.userBoard);
   app.patch("/api/profil/user/editprofile", [authJwt.verifyToken], controller.editProfil);
   app.patch("/api/profil/user/changepassword", [authJwt.verifyToken], controller.changePassword);
-  app.get("/api/profil/admin", [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
+  app.get("/api/admin", [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
   app.delete("/api/profil/all/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteOneUser);
-  app.get('/api/profil/admin/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.userDetail);
+  app.get('/api/admin/:id',/*  [authJwt.verifyToken, authJwt.isAdmin],  */controller.userDetail);
   app.get('/api/getroles', controller.possibleRoles);
 };

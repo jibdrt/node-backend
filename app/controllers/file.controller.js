@@ -67,6 +67,7 @@ exports.downloadFile = async (req, res) => {
         const thisFile = await File.findOne({ _id: req.params.id });
         console.log(thisFile);
         var path = './uploads/' + thisFile.name;
+        console.log(path);
         res.download(path);
     } catch (err) {
         return res.status(500).send(err);
