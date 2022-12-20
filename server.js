@@ -8,7 +8,13 @@ const corsOptions = {
 
 const fileUpload = require('express-fileupload');
 
-require('dotenv').config();
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV) {
+  require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
+} else {
+  require('dotenv').config();
+}
+
 
 app.use(cors(corsOptions));
 
@@ -22,13 +28,15 @@ app.use(fileUpload({
 }));
 
 app.get("/", (req, res) => {
-  res.json({ message: "app running" });
+  res.status(200).json({ message: 'app running' });
 });
 
 const db = require("./app/models");
 const Role = db.role;
+
+console.log(dbConfig);
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(`mongodb://${process.env.DBHOST}:${process.env.DBPORT}/${process.env.DB}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -40,6 +48,7 @@ db.mongoose
     console.error("Connection error", err);
     process.exit();
   });
+
 
 
 
@@ -78,3 +87,5 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}.`);
 });
+
+module.exports = app;

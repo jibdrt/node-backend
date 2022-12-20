@@ -47,7 +47,7 @@ exports.signup = (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
-          res.status(200).send({ message: "Compte enregistré, connectez-vous avec vos identifiants" });
+          res.status(201).send({ message: "Compte enregistré, connectez-vous avec vos identifiants" });
         });
       });
     }

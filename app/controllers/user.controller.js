@@ -159,7 +159,7 @@ exports.userBoard = async (req, res, next) => {
       }
 
     ])
-    return res.send({ user });
+    return res.status(200).send({ user });
   } catch (err) {
     next(err);
   }
