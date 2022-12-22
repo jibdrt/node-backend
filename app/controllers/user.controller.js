@@ -144,22 +144,22 @@ exports.userBoard = async (req, res, next) => {
       req.userId = decoded.id;
       return req.userId;
     });
-    const user = await User.find({ _id: decoded }).populate([
+    const user = await User.findById({ _id: decoded }).populate([
       {
         path: "roles",
         select: { _id: 0, name: 1 }
       },
-      {
+/*       {
         path: "postedNotes",
         select: { _id: 0, title: 1 }
-      },
+      }, */
       {
         path: "involvement",
         select: { _id: 0, title: 1 }
       }
 
     ])
-    return res.status(200).send({ user });
+    return res.status(200).send(user);
   } catch (err) {
     next(err);
   }

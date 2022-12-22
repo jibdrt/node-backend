@@ -12,18 +12,6 @@ const User = mongoose.model(
                 ref: "Role"
             }
         ],
-        postedNotes: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Note"
-            }
-        ],
-        postedFiles: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "File"
-            }
-        ],
         involvement: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -31,14 +19,15 @@ const User = mongoose.model(
             }
         ],
         picture: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Picture"
-            }
-        ]
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Picture"
+                }
+            ]
+
     }),
 );
 
-
-
 module.exports = User;
+
+

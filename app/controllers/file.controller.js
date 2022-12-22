@@ -21,7 +21,7 @@ exports.newFile = async (req, res) => {
             req.userId = decoded.id;
             return req.userId;
         });
-        const newFile = await new File(req.files[filekey]);
+        const newFile =  new File(req.files[filekey]);
         const user = await User.findById({ _id: decoded });
 
         newFile.posted_by = user;

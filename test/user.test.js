@@ -8,12 +8,18 @@ chai.should();
 chai.use(chaihttp);
 
 
-/* before('create users in collection before tests', (done) => {
+before('create users in collection before tests', (done) => {
     console.log('create users in collection before tests');
     const user = new User({ username: "pierre", email: "pierre@gmail.com", password: "password", roles: ["user"] });
-    user.save();
-    done();
-}) */
+    chai.request(app)
+    .post('/api/auth/signup')
+    .send(user)
+    .end((err, res) => {
+        if (err) done(err);
+        console.log('default user created');
+        done();
+    });
+});
 
 
 after('drop user collection after tests', (done) => {
@@ -64,7 +70,7 @@ describe('User', () => {
                         })
                 })
             })
-    })
+    });
 
 
 

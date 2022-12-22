@@ -8,7 +8,7 @@ const corsOptions = {
 
 const fileUpload = require('express-fileupload');
 
-console.log(process.env.NODE_ENV);
+/* console.log(process.env.NODE_ENV); */
 if (process.env.NODE_ENV) {
   require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 } else {
@@ -32,6 +32,7 @@ app.get("/", (req, res) => {
 });
 
 const db = require("./app/models");
+const User = require("./app/models/user.model");
 const Role = db.role;
 
 console.log(dbConfig);
@@ -75,7 +76,26 @@ function initial() {
       });
     }
   });
-}
+
+
+  User.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new User({
+        username: "admin",
+        email: "admin@gmail.com",
+        password: "admin",
+        roles: ["admin"]
+      }).save(err => {
+        if (err) {
+          if (err) {
+            console.log("error", err);
+          }
+          console.log("admin account created");
+        }
+      })
+    }
+  })
+};
 
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
