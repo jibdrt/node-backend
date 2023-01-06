@@ -4,11 +4,11 @@ const User = db.user;
 
 
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
+checkFreeCredentials = (req, res, next) => {
 
-  // Username
+  // Username checking
   User.findOne({
-    username: req.body.username
+      username: req.body.username
   }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -19,7 +19,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
       return;
     }
 
-    // Email
+    // Email checking
     User.findOne({
       email: req.body.email
     }).exec((err, user) => {
@@ -36,7 +36,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   });
 };
 
-checkRolesExisted = (req, res, next) => {
+checkRoleValidity = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
@@ -51,7 +51,7 @@ checkRolesExisted = (req, res, next) => {
 };
 
 const verifySignUp = {
-  checkDuplicateUsernameOrEmail,
-  checkRolesExisted
+  checkFreeCredentials,
+  checkRoleValidity
 };
 module.exports = verifySignUp;

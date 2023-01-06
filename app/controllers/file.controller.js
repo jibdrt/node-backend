@@ -28,7 +28,7 @@ exports.newFile = async (req, res) => {
 
         await newFile.save();
 
-        user.postedFiles.push(newFile._id);
+        /* user.postedFiles.push(newFile._id); */
 
         // save user
         await user.save();

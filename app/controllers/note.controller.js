@@ -35,8 +35,8 @@ exports.newNote = async (req, res, next) => {
         // save the note
         await newNote.save();
 
-        // push note to postedNotes[] in user
-        user.postedNotes.push(newNote._id);
+/*         // push note to postedNotes[] in user
+        user.postedNotes.push(newNote._id); */
 
         // save user
         await user.save();
@@ -147,10 +147,10 @@ exports.deleteOneNote = async (req, res, next) => {
             { $unset: { involvement: '' }}
         );
 
-        const targetedPostedNote = await User.findOneAndUpdate(
+/*         const targetedPostedNote = await User.findOneAndUpdate(
             { postedNotes: noteId },
             { $unset: { postedNotes: '' }}
-        );
+        ); */
 
         res.send(`note ${targetedForDelete.id} has been deleted and his ${targetedInvolvement.id}, ${targetedPostedNote.id} too`);
     } catch (err) {

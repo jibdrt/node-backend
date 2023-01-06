@@ -8,13 +8,19 @@ module.exports = function(app) {
     );
     next();
   });
+
+  
   app.post(
     "/api/auth/signup",
     [
-      verifySignUp.checkDuplicateUsernameOrEmail,
-      verifySignUp.checkRolesExisted
+      verifySignUp.checkFreeCredentials,
+      verifySignUp.checkRoleValidity
     ],
     controller.signup
   );
+
+
+
+  
   app.post("/api/auth/signin", controller.signin);
 };

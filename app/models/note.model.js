@@ -1,5 +1,5 @@
 
-const timestampOption = {
+const timestamp = {
   timestamps: {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
@@ -22,7 +22,6 @@ const Note = mongoose.model(
       type: Date,
       required: false
     },
-    is_pinned: Boolean,
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       username: String,
@@ -39,7 +38,7 @@ const Note = mongoose.model(
         ref: "User"
       }
     ]
-  }, timestampOption)
+  }, timestamp)
 );
 
 

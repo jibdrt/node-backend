@@ -30,12 +30,11 @@ exports.uploadPic = async (req, res) => {
             { $set: { picture: newPicture._id } }
         );
 
-    
         newPicture.user = user;
 
         await newPicture.save();
 
-/*         user.picture.push(newPicture._id); */
+        user.picture.push(newPicture._id);
 
         await user.save();
 

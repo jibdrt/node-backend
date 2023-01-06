@@ -117,14 +117,14 @@ exports.changePassword = async (req, res) => {
         console.log('correspondance ok');
 
         //Update password for user with new password hash
-        bcrypt.genSalt(10, (salt) =>
+        bcrypt.genSalt(8, (salt) =>
           bcrypt.hash(newPassword, salt, (err, hash) => {
             if (err) throw err;
             user.password = hash;
             user.save();
           })
         );
-        res.send("Mot de passe mis à jour");
+        res.status(201).send("Mot de passe mis à jour");
 
       } else {
         //Password does not match
