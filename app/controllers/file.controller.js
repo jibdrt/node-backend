@@ -62,8 +62,9 @@ exports.getFiles = async (req, res) => {
 
 exports.readFile = async (req, res) => {
     try {
-        const filekey = Object.keys(req.files)[0];
-        const data = fs.readFileSync('./uploads/' + req.files[filekey].name);
+        const file = await File.findOne({ _id: req.params.id });
+        const filename = file.name;
+        const data = fs.readFileSync('./uploads/' + filename);
         console.log(data);
     } catch (err) {
         console.log(err);
