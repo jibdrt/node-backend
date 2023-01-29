@@ -28,7 +28,7 @@ exports.newFile = async (req, res) => {
 
         await newFile.save();
 
-        /* user.postedFiles.push(newFile._id); */
+        user.postedFiles.push(newFile._id);
 
         // save user
         await user.save();
@@ -60,11 +60,20 @@ exports.getFiles = async (req, res) => {
     }
 }
 
+exports.readFile = async (req, res) => {
+    try {
+        const filekey = Object.keys(req.files)[0];
+        const data = fs.readFileSync('./uploads/' + req.files[filekey].name);
+        console.log(data);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
 exports.downloadFile = async (req, res) => {
     try {
-        const thisFile = await File.findOne({ _id: req.params.id });
+        const thisFile = await File.findOne({ _id: req.params.id }); //try findbyId
         console.log(thisFile);
         var path = './uploads/' + thisFile.name;
         console.log(path);

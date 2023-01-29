@@ -30,7 +30,7 @@ exports.newNote = async (req, res, next) => {
             { _id: participants },
             { $addToSet: { involvement: newNote._id } }
         );
-        console.log(concerned);
+/*         console.log(concerned); */
 
         // save the note
         await newNote.save();

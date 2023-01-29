@@ -149,10 +149,6 @@ exports.userBoard = async (req, res, next) => {
         path: "roles",
         select: { _id: 0, name: 1 }
       },
-/*       {
-        path: "postedNotes",
-        select: { _id: 0, title: 1 }
-      }, */
       {
         path: "involvement",
         select: { _id: 0, title: 1 }

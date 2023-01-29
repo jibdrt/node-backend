@@ -19,11 +19,17 @@ const User = mongoose.model(
             }
         ],
         picture: [
-                {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "Picture"
-                }
-            ]
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Picture"
+            }
+        ],
+        postedFiles: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "File"
+            }
+        ]
 
     }),
 );
