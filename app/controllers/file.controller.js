@@ -62,10 +62,11 @@ exports.getFiles = async (req, res) => {
 
 exports.readFile = async (req, res) => {
     try {
-        const file = await File.findOne({ _id: req.params.id });
+        const file = await File.findById({ _id: req.params.id });
         const filename = file.name;
-        const data = fs.readFileSync('./uploads/' + filename);
-        console.log(data);
+        const path = './uploads/' + filename;
+/*         const data = fs.readFileSync(path); */
+        res.send(path);
     } catch (err) {
         console.log(err);
     }
