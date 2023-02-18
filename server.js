@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+var bcrypt = require("bcryptjs");
 const app = express();
-const dbConfig = require("./app/config/db.config");
+/* const dbConfig = require("./app/config/db.config"); */
 const corsOptions = {
   origin: "http://localhost:8081"
 };
@@ -85,9 +86,9 @@ db.mongoose
                     name: "user"
                   }).save(),
                   new User({
-                    name: "admino",
-                    password: "admino",
-                    email: "admino@gmail.com",
+                    username: "admin",
+                    email: "admin@gmail.com",
+                    password: bcrypt.hashSync("admin", 8),
                     roles: [adminRole._id] // utilise l'_id de l'adminRole
                   }).save()
                 ]);
