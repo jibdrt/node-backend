@@ -30,18 +30,12 @@ exports.newNote = async (req, res, next) => {
             { _id: participants },
             { $addToSet: { involvement: newNote._id } }
         );
-/*         console.log(concerned); */
 
         // save the note
         await newNote.save();
 
-/*         // push note to postedNotes[] in user
-        user.postedNotes.push(newNote._id); */
-
         // save user
         await user.save();
-
-
 
         const newNotePushed = await Note.findById(newNote._id)
 
@@ -67,14 +61,13 @@ exports.newNote = async (req, res, next) => {
 
 exports.getAllNotes = async (req, res, next) => {
     try {
-        const notes = await Note.find({})
-
-            // return username for creator and participants
-            .populate([
+        const notes = await Note.find({}).sort({_id: -1})       // sort from newest
+                                                                
+            .populate([                                 
                 {
                     path: "creator",
                     select: { _id: 0, username: 1 }
-                },
+                },                                             // return username for creator and participants
                 {
                     path: "participants",
                     select: { _id: 0, username: 1 }
@@ -86,6 +79,27 @@ exports.getAllNotes = async (req, res, next) => {
         next(err)
     }
 };
+
+
+exports.getMyNotes = async (req, res, next) => {
+    try {
+      const notes = await Note.find({ participants: req.userId })
+        .sort({ _id: -1 })
+        .populate([
+          {
+            path: "creator",
+            select: { _id: 0, username: 1 }
+          },
+          {
+            path: "participants",
+            select: { _id: 0, username: 1 }
+          }
+        ]);
+      return res.send(notes);
+    } catch (err) {
+      next(err);
+    }
+  };
 
 exports.getOneNote = async (req, res) => {
     try {

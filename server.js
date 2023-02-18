@@ -44,10 +44,10 @@ db.mongoose
     setTimeout(() => {
       initial()
         .then(() => {
-          console.log("Initialization completed");
+          console.log("Init completed");
         })
         .catch((error) => {
-          console.log("Initialization error: ", error);
+          console.log("Init error: ", error);
         });
     }, 1000);                                         // Retarder l'exécution de initial de 1 sec
   })
@@ -61,7 +61,7 @@ db.mongoose
     return new Promise((resolve, reject) => {
       Role.estimatedDocumentCount((err, count) => {
         if (err) {
-          console.error("Error counting roles:", err);
+          console.error("Error when count roles:", err);
           reject(err);
         } else {
           if (count === 2) {
@@ -70,9 +70,9 @@ db.mongoose
               .then((role) => {
                 if (role) {
                   adminRole = role;
-                  console.log("Admin role found:", role);
+                  console.log("Found admin role:", role);
                 } else {
-                  console.log("Admin role not found, creating...");
+                  console.log("Admin role not found let's create it");
                   return new Role({
                     name: "admin"
                   }).save();
@@ -80,7 +80,7 @@ db.mongoose
               })
               .then((createdRole) => {
                 adminRole = createdRole || adminRole; // utilise le rôle créé ou celui trouvé
-                console.log("Using admin role:", adminRole);
+                console.log("Admin role:", adminRole);
                 return Promise.all([
                   new Role({
                     name: "user"
@@ -89,21 +89,21 @@ db.mongoose
                     username: "admin",
                     email: "admin@gmail.com",
                     password: bcrypt.hashSync("admin", 8),
-                    roles: [adminRole._id] // utilise l'_id de l'adminRole
+                    roles: [adminRole._id]
                   }).save()
                 ]);
               })
               .then(() => {
-                console.log("Added roles and user");
+                console.log("Roles and default admin created");
                 resolve();
               })
               .catch((error) => {
-                console.error("Error adding roles and user:", error);
+                console.error("Error when creating roles and user:", error);
                 reject(error);
               });
           } else {
-            console.log("Number of roles in database:", count);
-            console.log("No need to add roles and user");
+            console.log("Number of roles:", count);
+            console.log("No need to create roles and user");
             resolve();
           }
         }
